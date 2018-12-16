@@ -1,0 +1,24 @@
+<div *ngIf="showChatBotWrapper" class="chat-window opened">
+  <div class="mahindra_logo">
+    <img src="./assets/images/mahindra_logo.jpg" class="img-responsive doneLoading">
+  </div>
+  <div class="upper-div text-center">
+    <div class="gif-box">
+      <!-- <img src="./assets/images/UnripeAdoredGrayreefshark.gif"> -->
+    </div>
+    <img src="./assets/images/close-icon.png" (click)="CloseChatBotWrapper()" class="close-btn">
+    <img src="./assets/images/close-icon.png" (click)="clearChat()" class="close-btn" style="right: 40px">
+  </div>
+
+  <div #scrollMe class="chat-outer-wrapper">
+    <div class="chat-wrapper">
+    
+        <app-login></app-login>
+    
+      <!-- <div class="reply-box">
+        <div class="container-fluid"></div>
+      </div> -->
+    </div>
+  </div>
+
+</div>

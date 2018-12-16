@@ -1,0 +1,104 @@
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import * as io from 'socket.io-client';
+
+@Injectable()
+export class WebsocketService {
+
+  constructor() { }
+
+  private url = 'wss://qsdev.mahindra.com/app/c23feec8-eb7d-412d-8498-2ce05695c7b5';
+  private socket;
+
+  //
+
+  // public sendMessage(message) {
+  //   this.socket.emit('data', message);
+  //   console.log("MESSAGE SENT");
+  // }
+
+  public getMessages() {
+    let observable = new Observable(observer => {
+
+      var ws = new WebSocket("wss://qsdev.mahindra.com/app/c23feec8-eb7d-412d-8498-2ce05695c7b5");
+
+      ws.onopen = function (params) {
+        console.log("web socket opened");
+        
+        console.log(params);
+      }
+      ws.onmessage = function (evt) {
+        var received_msg = evt.data;
+        console.log(JSON.stringify(received_msg, null, 2));
+      }
+      setTimeout(() => {
+        var openDoc = this.openDoc(this.getHandle(), "c23feec8-eb7d-412d-8498-2ce05695c7b5", "11003", "Mumbai1947")
+        this.initiateHandle();
+        var qFieldSelect = this.GetField(this.getHandle(), '');
+        var qSelectValue = this.Select('', '');
+
+        setTimeout(() => {
+          ws.send(JSON.stringify(openDoc));
+          ws.send(JSON.stringify(qFieldSelect));
+          ws.send(JSON.stringify(qSelectValue));
+  
+        }, 2000);
+       
+      }, 1000);
+
+    })
+    return observable;
+  }
+
+  static feHandle = 0;
+
+  initiateHandle() {
+    // that means socket is connected and openDoc query sent over socket
+    WebsocketService.feHandle = 1; 
+  }
+
+  getHandle() {
+
+    return 0;
+  }
+
+  openDoc(handle, qDocName, qUserName, qPassword) {
+    var openDoc = {
+      "handle": -1,
+      "method": "OpenDoc",
+      "params": {
+        "qDocName": qDocName,
+        "qUserName": qUserName,
+        "qPassword": qPassword,
+        "qSerial": "",
+        "qNoData": false
+      }
+    };
+    return openDoc;
+  }
+
+  GetField(handle, qFieldName) {
+    var qFieldSelect = {
+      "handle": 1,
+      "method": "GetField",
+      "params": {
+        "qFieldName": "[FY Year]"
+      }
+    };
+    return qFieldSelect;
+  }
+
+  Select(handle, fieldValue) {
+    var selectReq = {
+      "handle": 2,
+      "method": "Select",
+      "params": {
+        "qMatch": "F17",
+        "qSoftLock": false,
+        "qExcludedValuesMode": 0
+      }
+    };
+    return selectReq;
+  }
+
+}
